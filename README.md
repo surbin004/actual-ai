@@ -11,6 +11,11 @@ A professional-grade fork of `sakowicz/actual-ai` optimized for self-hosted LLMs
     - **#ai-review ❓**: Low-confidence items are tagged for manual auditing. Search for these tags in Actual Budget to filter your review queue.
 - **Non-Destructive Notes**: AI reasoning and confidence scores are **appended** to existing transaction notes, preserving your original data.
 - **NPM 11 + Node 22**: Modernized Docker build for better performance on N100/Proxmox hardware.
+- **Mirror-Strict Transfer Linking**: Automatically bridges transfers between accounts by finding matching "mirror" amounts within a 5-day window. This prevents bank lag from causing misses while ensuring non-transfer items (like dividends) remain untouched.
+- **"Sorting Bin" Workflow**: Automatically processes any transaction assigned to the manual **"AI-Classify"** category.
+- **Payee Sanitization**: Built-in Regex engine strips bank "junk" (dates, transaction IDs, auth codes) to increase AI accuracy.
+- **Double-Tag Review**: High-confidence matches are tagged `#ai-worked`, while low-confidence items are tagged `#ai-review` for manual auditing.
+- **On-Budget Safety Gate**: Automatically skips off-budget/tracking accounts.
 
 ## 🛠 Configuration (Environment Variables)
 
