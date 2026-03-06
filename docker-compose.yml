@@ -3,7 +3,7 @@ services:
     container_name: actual-ai
     build:
       context: .
-    image: ghcr.io/YOUR_GITHUB_USERNAME/actual-ai:latest
+    image: ghcr.io/surbin004/actual-ai:latest
     restart: unless-stopped
     env_file:
       - .env
