@@ -3,19 +3,23 @@ services:
     container_name: actual-ai
     build:
       context: .
-    # Use the production command we defined in the Dockerfile
+    image: ghcr.io/YOUR_GITHUB_USERNAME/actual-ai:latest
     restart: unless-stopped
     env_file:
       - .env
     volumes:
-      # This is the ONLY volume you need to keep your budget data safe
+      # Persistent storage for Actual Budget metadata and sync state
       - ./data:/opt/node_app/data
     environment:
       - NODE_ENV=production
-      # Add your specific AI machine details here as defaults
       - AI_MODEL=${AI_MODEL:-mistral-nemo}
-      - OPENAI_BASE_URL=${OPENAI_BASE_URL}
+      - OLLAMA_BASE_URL=${OLLAMA_URL}
+      - ACTUAL_SERVER_URL=${ACTUAL_SERVER_URL}
+      - ACTUAL_SERVER_PASSWORD=${ACTUAL_PASSWORD}
+      - ACTUAL_PASSWORD=${ACTUAL_PASSWORD}
+      - ACTUAL_BUDGET_ID=${ACTUAL_BUDGET_ID}
+      - CRON_SCHEDULE=${CRON_SCHEDULE:-0 */4 * * * }
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
 
 volumes:
-  # We no longer need the 'notused' volume hack
   data:
