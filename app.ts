@@ -70,34 +70,38 @@ async function sync() {
         const tx = t as any;
         const rawPayee = tx.payee_name || tx.imported_payee || 'Unknown';
         
-        // PAYEE CLEANER: Remove dates (03/05), large numbers (123456), and bank keywords
+        // PAYEE CLEANER: Remove dates, IDs, and bank junk
         const cleanPayee = rawPayee
-          .replace(/\d{2,}\/\d{2,}/g, '') // Dates
-          .replace(/\d{4,}/g, '')         // Long IDs
-          .replace(/\b(PURCHASE|AUTH|ON|DEBIT|CARD|XX)\b/gi, '') // Keywords
+          .replace(/\d{2,}\/\d{2,}/g, '') 
+          .replace(/\d{4,}/g, '')         
+          .replace(/\b(PURCHASE|AUTH|ON|DEBIT|CARD|XX)\b/gi, '') 
           .trim();
 
         const result = await categorize(cleanPayee, menu);
         
         if (result && result.categoryId) {
-          const currentNotes = (t.notes || '').replace('#review', '').trim();
+          // CLEAN OLD TAGS FIRST
+          const currentNotes = (t.notes || '')
+            .replace('#ai-review', '')
+            .replace('#ai-worked', '')
+            .trim();
           
           const isHighConfidence = result.confidence > 85;
-          const statusNote = isHighConfidence ? '✅ Worked' : '❓ #review';
-          const newNote = `${currentNotes} | ${statusNote}: ${result.reason}`.trim();
+          const aiTag = isHighConfidence ? '#ai-worked' : '#ai-review';
+          const newNote = `${currentNotes} [${aiTag}]: ${result.reason}`.trim();
 
-          // FIX: Cast to any to bypass TS2353 'flagged' error
+          // UPDATE: Note-based tagging only to ensure API compatibility
           await api.updateTransaction(t.id, { 
             category: result.categoryId,
-            notes: newNote,
-            flagged: !isHighConfidence, 
+            notes: newNote
           } as any);
           
-          console.log(`${isHighConfidence ? '✅' : '❓'} ${cleanPayee} -> ${result.categoryId}`);
+          console.log(`${isHighConfidence ? '✅' : '❓'} ${cleanPayee} -> Assigned ID: ${result.categoryId}`);
         }
       }
     }
     await api.shutdown();
+    console.log('🏁 Sync complete.\n');
   } catch (e: any) {
     console.error(`[Sync Error]: ${e.message}`);
   }
