@@ -1,0 +1,25 @@
+# --- Node.js Standard ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# --- TypeScript Build ---
+dist/
+*.tsbuildinfo
+
+# --- Environment & Secrets ---
+.env
+.env.local
+.env.*.local
+
+# --- Actual Budget Data (CRITICAL) ---
+# This prevents your private budget files/metadata from being uploaded
+/data/
+
+# --- OS / Editor ---
+.DS_Store
+.idea/
+.vscode/
+*.swp

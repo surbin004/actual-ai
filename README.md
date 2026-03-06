@@ -1,0 +1,53 @@
+# Actual-AI (Ollama/Mistral-Nemo Edition)
+
+A professional-grade fork of `sakowicz/actual-ai` optimized for self-hosted LLMs. This version is specifically tuned for **Mistral-Nemo** and **Ollama** to provide an automated, human-in-the-loop bookkeeping experience on your local network.
+
+## 🚀 Key Enhancements
+- **"Sorting Bin" Workflow**: Automatically processes any transaction assigned to the manual **"AI-Classify"** category.
+- **Payee Sanitization**: Built-in Regex engine strips bank "junk" (dates, transaction IDs, auth codes) before the AI sees it, significantly increasing accuracy.
+- **On-Budget Safety Gate**: Automatically skips tracking/off-budget accounts to protect your net worth reporting and investment data.
+- **Color-Coded Review System**: 
+    - **Green ✅**: Confident matches are noted as "Worked."
+    - **Red/Purple ❓**: Low-confidence items are **Flagged** (Red) and tagged with **#review** (Purple) for quick manual auditing.
+- **Non-Destructive Notes**: AI reasoning and confidence scores are **appended** to existing transaction notes rather than overwriting them.
+- **Deterministic AI**: Uses zero-temperature greedy decoding to eliminate conversational "hallucinations" in JSON output.
+
+## 🛠 Configuration (Environment Variables)
+
+
+| Variable | Required | Description | Example |
+| :--- | :--- | :--- | :--- |
+| `OLLAMA_BASE_URL` | Yes | Your Ollama API endpoint (no /api suffix) | `http://your-ollama-ip:11434` |
+| `AI_MODEL` | Yes | Your Ollama model name | `mistral-nemo` |
+| `ACTUAL_SERVER_URL`| Yes | URL of your Actual server (no trailing slash) | `http://your-actual-server-ip:5006` |
+| `ACTUAL_SERVER_PASSWORD` | Yes | Your Actual Budget server login | `your_login_password` |
+| `ACTUAL_PASSWORD` | Yes | Your Budget Encryption/File Password | `your_sync_password` |
+| `ACTUAL_BUDGET_ID` | Yes | The **Sync ID** from Advanced Settings | `fc3825fd-b982-4b72...` |
+| `CRON_SCHEDULE` | No | Sync frequency (Cron syntax) | `0 */4 * * *` (Every 4 hours) |
+
+## 📖 How to Use the "Sorting Bin"
+1. In your **Actual Budget** web UI, create a new category named exactly **`AI-Classify`** (case sensitive).
+2. To trigger a manual AI categorization, simply change any transaction's category to **`AI-Classify`**.
+3. On the next sync, the AI will:
+    - Identify the merchant (e.g., "Speedway" -> "Gas").
+    - Replace `AI-Classify` with the correct category ID.
+    - Append its reasoning and confidence score to the notes.
+    - Set a **Red Flag** and **#review** tag if confidence is below 85%.
+
+## 📦 Docker Deployment (Portainer/Docker Compose)
+
+```yaml
+services:
+  actual-ai:
+    image: ghcr.io/surbin004/actual-ai:master
+    container_name: actual-ai
+    restart: unless-stopped
+    environment:
+      - ACTUAL_SERVER_URL=http://your-actual-server-ip:5006
+      - OLLAMA_BASE_URL=http://your-ollama-ip:11434
+      - ACTUAL_SERVER_PASSWORD=${ACTUAL_PASSWORD}
+      - ACTUAL_PASSWORD=${ACTUAL_PASSWORD}
+      - ACTUAL_BUDGET_ID=${ACTUAL_BUDGET_ID}
+      - AI_MODEL=mistral-nemo
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
+      - CRON_SCHEDULE=0 */4 * * *

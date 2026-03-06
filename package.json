@@ -1,0 +1,41 @@
+{
+  "name": "@surbin004/actual-ai",
+  "version": "2.3.1",
+  "description": "Ollama-optimized AI classification for Actual Budget.",
+  "main": "app.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node ./app.ts",
+    "prod": "node dist/app.js",
+    "test": "jest",
+    "lint": "eslint --fix **/*.ts"
+  },
+  "author": "surbin004",
+  "license": "MIT",
+  "dependencies": {
+    "@actual-app/api": "^26.2.1",
+    "@ai-sdk/openai": "^1.1.9",
+    "ai": "^4.1.45",
+    "axios": "^1.7.9",
+    "dotenv": "^16.4.7",
+    "handlebars": "^4.7.8",
+    "node-cron": "^3.0.3",
+    "ollama-ai-provider": "^1.2.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@types/node": "^22.14.1",
+    "@types/node-cron": "^3.0.11",
+    "@typescript-eslint/eslint-plugin": "^8.29.1",
+    "@typescript-eslint/parser": "^8.29.1",
+    "eslint": "^8.57.1",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.3.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
