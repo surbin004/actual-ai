@@ -19,9 +19,9 @@ Set these in your **Portainer Stack** or `docker-compose.yml`:
 
 | Variable | Required | Description | Example |
 | :--- | :--- | :--- | :--- |
-| `OLLAMA_BASE_URL` | Yes | Your Ollama API endpoint (no /api suffix) | `http://192.168.1.77:11434` |
+| `OLLAMA_BASE_URL` | Yes | Your Ollama API endpoint (no /api suffix) | `your-ollama-ip:11434` |
 | `AI_MODEL` | Yes | Your Ollama model name | `mistral-nemo` |
-| `ACTUAL_SERVER_URL`| Yes | URL of your Actual server (no trailing slash) | `http://192.168.1.185:5006` |
+| `ACTUAL_SERVER_URL`| Yes | URL of your Actual server (no trailing slash) | `your-actual-server-ip:5006` |
 | `ACTUAL_SERVER_PASSWORD` | Yes | Your Actual Budget server login | `your_login_password` |
 | `ACTUAL_PASSWORD` | Yes | Your Budget Encryption/File Password | `your_sync_password` |
 | `ACTUAL_BUDGET_ID` | Yes | The **Sync ID** from Advanced Settings | `fc3825fd-b982-4b72...` |
@@ -44,8 +44,8 @@ services:
     container_name: actual-ai
     restart: unless-stopped
     environment:
-      - ACTUAL_SERVER_URL=http://192.168.1.185:5006
-      - OLLAMA_BASE_URL=http://192.168.1.77:11434
+      - ACTUAL_SERVER_URL=http://your-actual-server-up:5006
+      - OLLAMA_BASE_URL=http://your-ollama-ip:11434
       - ACTUAL_SERVER_PASSWORD=${ACTUAL_PASSWORD}
       - ACTUAL_PASSWORD=${ACTUAL_PASSWORD}
       - ACTUAL_BUDGET_ID=${ACTUAL_BUDGET_ID}
